@@ -184,6 +184,7 @@ pip install -e .
 ```
 
 There 2 ways to try this backtesting engine:
+
 **Interactive Tutorial (Jupyter Notebook)**
 The tutorial covers:
 - Framework overview and architecture
