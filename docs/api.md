@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document provides comprehensive API documentation for the backtesting engine, including detailed examples, error handling patterns, and integration guides. The API design follows REST principles and modern Python best practices.
+This document provides API documentation for this backtesting engine, including detailed examples, error handling patterns, and integration guides. The API design follows REST principles.
 
 ## Core API Components
 
@@ -871,5 +871,3 @@ results.plot_rolling_sharpe(ax=axes[1,1])
 plt.tight_layout()
 plt.show()
 ```
-
-This API documentation provides the comprehensive reference needed for both integration work and understanding the system's capabilities at the level expected by top-tier firms.
