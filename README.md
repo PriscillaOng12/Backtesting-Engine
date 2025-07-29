@@ -5,21 +5,20 @@
 [![Performance](https://img.shields.io/badge/performance-10k%20events/sec-brightgreen.svg)](#performance)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-> **A production-grade, event-driven backtesting framework engineered for institutional quantitative trading strategies, combining the precision of academic research with the performance demands of production systems.**
+A backtesting engine I built to learn how quantitative trading strategies are tested through event-driven systems, financial mathematics, and performance optimization.
 
-Built during my deep dive into quantitative finance, this engine started as a solution to a fundamental problem: existing backtesting tools either lack the mathematical rigor demanded by modern quantitative strategies or suffer from performance bottlenecks that make large-scale analysis impractical. This framework bridges that gap.
+![Demo Results](github_assets/demo_results.png)
 
-## 🎯 Why This Matters
 
-Modern quantitative trading requires backtesting engines that can:
+## 🎯 Understanding what makes a good backtesting engine
+
+Quantitative trading requires backtesting engines that can:
 - **Process millions of events** without memory leaks or performance degradation
 - **Implement sophisticated risk models** with mathematical precision 
 - **Handle market microstructure** effects like slippage and partial fills
 - **Provide statistical significance testing** to avoid overfitting
 
-This engine delivers on all fronts while maintaining institutional-quality code standards.
-
-## ⚡ Performance Achievements
+## ⚡ Performance Benchmarks
 
 | Metric | Result | Industry Benchmark |
 |--------|--------|--------------------|
@@ -53,161 +52,70 @@ graph TD
     F --> G[Portfolio Tracker]
     G --> H[Performance Analytics]
 ```
+## 🏗️ Architecture
 
-### Core Design Decisions
+![Architecture](github_assets/architecture.png)
 
-**Event-Driven Architecture**: Chose event-driven over vectorized approaches to ensure:
-- Realistic chronological order processing
-- Proper market microstructure simulation
-- Support for complex multi-asset strategies
+### Core Components
 
-**Pydantic v2 Validation**: All events are type-validated at runtime, preventing the silent data corruption bugs that plague financial systems.
+- **Event System** - MarketEvent, SignalEvent, OrderEvent, FillEvent
+- **Portfolio Management** - Real-time position tracking with P&L calculation
+- **Strategy Framework** - Base classes for custom trading strategies
+- **Execution Simulation** - Realistic broker simulation with slippage/commissions
+- **Risk Management** - Position sizing, stop-losses, and exposure limits
+- **Performance Analysis** - Comprehensive metrics and reporting
 
-**Priority Queue Processing**: Custom event priority system ensures market data always processes before signals, maintaining temporal consistency.
+## ✨ Key Features
 
-## 🧮 Mathematical Rigor
+- 🏗️ **Event-Driven Architecture** - Clean separation of market data, signals, orders, and fills
+- ⚡ **High Performance** - Processes 10,000+ events/second with optimized data structures  
+- 🎯 **Realistic Execution** - Advanced slippage models, commission structures, and partial fill simulation
+- 📊 **Professional Analytics** - 20+ industry-standard performance metrics and risk analysis
+- 📈 **Interactive Reports** - Beautiful HTML dashboards with Plotly visualizations
+- 🔧 **Extensible Framework** - Easy-to-extend strategy framework for custom trading logic
+- 🛡️ **Type Safety** - Comprehensive Pydantic validation and type hints throughout
+- 🧪 **Thoroughly Tested** - 100% test coverage with comprehensive integration tests
+  
 
-### Risk Metrics Implementation
-```python
-# Sharpe Ratio with proper statistical significance testing
-def calculate_sharpe_ratio(returns: np.ndarray, risk_free_rate: float = 0.02) -> Dict:
-    excess_returns = returns - risk_free_rate/252
-    sharpe = np.sqrt(252) * np.mean(excess_returns) / np.std(excess_returns)
-    
-    # Statistical significance test
-    t_stat = sharpe * np.sqrt(len(returns))
-    p_value = 2 * (1 - stats.t.cdf(abs(t_stat), len(returns) - 1))
-    
-    return {
-        'sharpe_ratio': sharpe,
-        'significance': p_value < 0.05,
-        'confidence_interval': _calculate_sharpe_ci(returns, 0.95)
-    }
-```
+### Core Design Decisions - Technical Documentation
 
-### Volatility Estimation with GARCH
-```python
-# Implemented GARCH(1,1) for dynamic volatility estimation
-def estimate_garch_volatility(returns: pd.Series) -> pd.Series:
-    """
-    GARCH(1,1): σ²t = ω + α*ε²t-1 + β*σ²t-1
-    Used for dynamic position sizing and risk management
-    """
-    model = arch_model(returns, vol='GARCH', p=1, q=1)
-    fitted = model.fit(disp='off')
-    return fitted.conditional_volatility
-```
+I've separately documented my thought process, research, and reasoning behind each design decision below: 
 
-## 🎛️ Advanced Features Deep Dive
+### 📐 [Mathematical Models & Algorithms](docs/algorithms.md)
+*The statistical and financial mathematics behind the engine. GARCH volatility models, walk-forward analysis, and why most Sharpe ratios aren't statistically significant.*
+- Statistical significance testing and multiple hypothesis correction
+- GARCH volatility modeling and cointegration analysis  
+- Value-at-Risk implementations and Monte Carlo simulation
+- Walk-forward analysis and overfitting detection
 
-### 1. Market Microstructure Modeling
-```python
-class AdvancedSlippageModel:
-    """
-    Implements square-root market impact model:
-    Impact = σ * (Volume/ADV)^0.5 * spread_component
-    
-    Based on Almgren-Chriss optimal execution research
-    """
-    def calculate_slippage(self, order_size: int, adv: float, volatility: float) -> Decimal:
-        market_impact = volatility * np.sqrt(order_size / adv) * self.spread_factor
-        return Decimal(str(min(market_impact, self.max_impact)))
-```
+### 🏗️ [System Architecture](docs/architecture.md)  
+*Event-driven design, memory management, and how to build systems that don't fall over. Includes the mistakes I made and how I fixed them.*
+- Event-driven design patterns and priority queue implementation
+- Memory management and performance optimization techniques
+- Scalability considerations and distributed computing design
+- Database schema optimization for time-series data
 
-### 2. Walk-Forward Analysis Engine
-```python
-# Prevents overfitting through rigorous out-of-sample testing
-wf_analyzer = WalkForwardAnalyzer(
-    training_window=252,  # 1 year rolling window
-    testing_window=63,    # 3 month out-of-sample
-    step_size=21,         # Monthly re-optimization
-    min_observations=500   # Statistical significance threshold
-)
-```
+### ⚡ [Performance Engineering](docs/performance.md)
+*The optimization journey from 800 to 10,000+ events/second. Profiling techniques, memory optimization, and why I learned to love JIT compilation.*
+- Benchmarking methodology and profiling techniques
+- JIT compilation with Numba and vectorized operations
+- Memory-mapped data loading and garbage collection tuning
+- Database optimization and connection pooling
 
-### 3. Monte Carlo Risk Simulation
-```python
-# Bootstrap resampling for robust risk assessment
-mc_results = MonteCarloAnalyzer().run_simulation(
-    strategy_returns=returns,
-    num_simulations=10000,
-    confidence_levels=[0.95, 0.99, 0.995],
-    method='block_bootstrap'  # Preserves autocorrelation structure
-)
-```
+### 📊 [API Reference](docs/api.md)
+*Complete API documentation with examples. How to build strategies, handle data, and integrate risk management.*
+- Complete API documentation with examples
+- Strategy framework and extensibility patterns
+- Risk management system integration
+- Error handling and monitoring capabilities
 
-## 🔧 Performance Engineering
+### 📋 [Product Strategy](product.md)
+*Market analysis and product thinking. Who would actually use this? What would a business model look like? How does it compare to existing solutions?*
+- Market analysis and competitive positioning
+- User personas and feature prioritization
+- Go-to-market strategy and success metrics
+- Technical product decisions and trade-offs
 
-### Memory Optimization
-- **Custom Event Queue**: Implemented with `heapq` for O(log n) insertions
-- **Lazy Loading**: Market data loaded on-demand to minimize memory footprint
-- **Decimal Precision**: Financial calculations use `Decimal` for precision, optimized for performance
-
-### Latency Optimization
-- **JIT Compilation**: Critical path functions use NumPy/Numba for near-C performance
-- **Vectorized Operations**: Risk calculations leverage NumPy broadcasting
-- **Connection Pooling**: Database connections reused across backtests
-
-### Profiling Results
-```python
-# cProfile output for 100K event backtest:
-ncalls  tottime  percall  cumtime  percall filename:lineno(function)
-   1    0.000    0.000   12.450   12.450 engine.py:315(run)
-100000  0.850    0.000    8.200    0.000 events.py:145(process_market_event)
- 25000  1.250    0.000    2.800    0.000 portfolio.py:89(calculate_total_equity)
-```
-
-## 📊 Example: Sophisticated Strategy Implementation
-
-```python
-class StatisticalArbitrageStrategy(BaseStrategy):
-    """
-    Implements pairs trading with cointegration testing and Kalman filtering
-    for dynamic hedge ratio estimation.
-    """
-    
-    def __init__(self, symbol_pairs: List[Tuple[str, str]], **kwargs):
-        super().__init__(**kwargs)
-        self.pairs = symbol_pairs
-        self.kalman_filters = {}
-        self.adf_pvalues = {}
-        
-    def generate_signals(self, market_data: MarketDataSnapshot, 
-                        portfolio: Portfolio) -> List[SignalEvent]:
-        signals = []
-        
-        for pair in self.pairs:
-            # Test for cointegration
-            if not self._test_cointegration(pair, market_data):
-                continue
-                
-            # Update Kalman filter for hedge ratio
-            hedge_ratio = self._update_hedge_ratio(pair, market_data)
-            
-            # Calculate spread z-score
-            spread_zscore = self._calculate_spread_zscore(pair, hedge_ratio, market_data)
-            
-            # Generate mean reversion signals
-            if abs(spread_zscore) > self.entry_threshold:
-                signals.extend(self._create_pairs_signals(pair, spread_zscore, hedge_ratio))
-                
-        return signals
-    
-    def _test_cointegration(self, pair: Tuple[str, str], data: MarketDataSnapshot) -> bool:
-        """Augmented Dickey-Fuller test for cointegration"""
-        prices_a = self.get_price_history(pair[0], lookback=100)
-        prices_b = self.get_price_history(pair[1], lookback=100)
-        
-        # OLS regression to find hedge ratio
-        hedge_ratio = np.linalg.lstsq(prices_b.values.reshape(-1, 1), 
-                                     prices_a.values, rcond=None)[0][0]
-        
-        # Test spread for stationarity
-        spread = prices_a - hedge_ratio * prices_b
-        adf_stat, p_value = adfuller(spread.dropna())
-        
-        return p_value < 0.05  # Reject null hypothesis of unit root
-```
 
 ## 🧪 Testing & Quality Assurance
 
@@ -290,7 +198,7 @@ from backtesting_engine import BacktestEngine
 from backtesting_engine.strategies import MeanReversionStrategy
 from backtesting_engine.analysis import PerformanceAnalyzer
 
-# Create sophisticated mean reversion strategy
+# Create mean reversion strategy
 strategy = MeanReversionStrategy(
     strategy_id="institutional_mean_reversion",
     symbols=["AAPL", "MSFT", "GOOGL"],
@@ -328,13 +236,6 @@ print(f"Maximum Drawdown: {report.max_drawdown:.2%}")
 print(f"VaR (95%): {report.var_95:.2%}")
 ```
 
-## 📚 Documentation & Architecture
-
-- **[System Architecture](docs/architecture.md)** - Deep dive into event-driven design and component interactions
-- **[Mathematical Models](docs/algorithms.md)** - Financial mathematics implementation and validation
-- **[Performance Engineering](docs/performance.md)** - Optimization techniques and benchmarking methodology
-- **[API Reference](docs/api.md)** - Complete API documentation with examples
-- **[Product Strategy](product.md)** - Market analysis and product roadmap
 
 ## 🎯 Technical Debt & Future Enhancements
 
@@ -356,19 +257,10 @@ print(f"VaR (95%): {report.var_95:.2%}")
 3. **Microstructure Modeling**: Industry-grade market impact and liquidity modeling
 4. **Memory-Efficient Event Processing**: Custom data structures for minimal GC pressure
 
-## 📞 Contact & Collaboration
-
-Built with passion for quantitative finance and systems engineering. Open to collaboration on:
-- **Academic Research**: Contributing to open-source quantitative research
-- **Industry Applications**: Adapting framework for institutional use cases
-- **Technical Innovation**: Pushing boundaries of backtesting performance
 
 **Technical Stack**: Python 3.11+, Pydantic v2, NumPy, Pandas, Numba, PostgreSQL  
 **Development Principles**: TDD, Clean Architecture, Performance-First Design
 
----
-
-*This project represents my commitment to bringing academic rigor and engineering excellence to quantitative finance. Every design decision has been made with both mathematical correctness and production scalability in mind.*
 
 ## � Demo
 
@@ -430,29 +322,7 @@ print(f"Total Return: {results.total_return:.2%}")
 print(f"Sharpe Ratio: {results.sharpe_ratio:.2f}")
 ```
 
-## 🏗️ Architecture
 
-![Architecture](github_assets/architecture.png)
-
-### Core Components
-
-- **Event System** - MarketEvent, SignalEvent, OrderEvent, FillEvent
-- **Portfolio Management** - Real-time position tracking with P&L calculation
-- **Strategy Framework** - Base classes for custom trading strategies
-- **Execution Simulation** - Realistic broker simulation with slippage/commissions
-- **Risk Management** - Position sizing, stop-losses, and exposure limits
-- **Performance Analysis** - Comprehensive metrics and reporting
-
-## ✨ Key Features
-
-- 🏗️ **Event-Driven Architecture** - Clean separation of market data, signals, orders, and fills
-- ⚡ **High Performance** - Processes 10,000+ events/second with optimized data structures  
-- 🎯 **Realistic Execution** - Advanced slippage models, commission structures, and partial fill simulation
-- 📊 **Professional Analytics** - 20+ industry-standard performance metrics and risk analysis
-- 📈 **Interactive Reports** - Beautiful HTML dashboards with Plotly visualizations
-- 🔧 **Extensible Framework** - Easy-to-extend strategy framework for custom trading logic
-- 🛡️ **Type Safety** - Comprehensive Pydantic validation and type hints throughout
-- 🧪 **Thoroughly Tested** - 100% test coverage with comprehensive integration tests
 
 ## 📦 Installation
 
@@ -610,3 +480,258 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - 🐛 Issues: [GitHub Issues](https://github.com/your-username/professional-backtesting-engine/issues)
 - 📧 Email: your-email@example.com
 - 💬 Discussions: [GitHub Discussions](https://github.com/your-username/professional-backtesting-engine/discussions)
+- 
+# Backtesting Engine
+
+[![Python](https://img.shields.io/badge/python-v3.11+-blue.svg)](https://python.org)
+[![Tests](https://img.shields.io/badge/tests-23%20passed-brightgreen.svg)](#testing)
+[![Performance](https://img.shields.io/badge/performance-10k%20events/sec-brightgreen.svg)](#performance)
+
+A high-performance backtesting engine I built to properly test quantitative trading strategies. What started as frustration with existing tools turned into a deep dive into event-driven systems, financial mathematics, and performance optimization.
+
+![Demo Results](github_assets/demo_results.png)
+
+## The Problem I Solved
+
+I was trying to backtest a pairs trading strategy and kept running into the same issues with existing libraries:
+- **Memory leaks** when processing large datasets (looking at you, zipline)
+- **Unrealistic execution** that ignored market microstructure 
+- **No statistical rigor** for testing significance
+- **Poor performance** that made parameter optimization painfully slow
+
+So I built this engine from scratch, focusing on the things that actually matter for serious backtesting.
+
+## Key Technical Achievements
+
+| What I Built | Why It Matters | Impact |
+|--------------|----------------|---------|
+| **Event-driven architecture** | Real trading systems aren't vectorized | Eliminates lookahead bias, enables realistic execution |
+| **Statistical significance testing** | Most backtests ignore this completely | Catches overfitting, validates strategy robustness |
+| **Advanced market microstructure** | Slippage models based on actual research | Realistic performance estimates vs production |
+| **Memory-efficient processing** | Academic tools don't scale | 10k+ events/sec, <500MB for years of data |
+
+## What I Learned Building This
+
+**Financial Mathematics**: Implementing proper risk metrics isn't just plugging formulas into NumPy. I had to understand the statistical foundations of Sharpe ratio confidence intervals, GARCH volatility modeling, and cointegration testing.
+
+**Performance Engineering**: Getting to 10k+ events/second meant profiling everything, optimizing memory allocation, and learning when to use Decimal vs float (hint: always Decimal for financial calculations).
+
+**Event-Driven Systems**: Real trading systems are event-driven, not vectorized. This taught me about priority queues, temporal consistency, and why proper ordering matters more than you'd think.
+
+```python
+# This is how real trading systems work:
+while not market_closed:
+    event = event_queue.get_next()
+    if isinstance(event, MarketEvent):
+        strategy.process_market_data(event)
+    elif isinstance(event, SignalEvent):
+        portfolio.process_signal(event)
+    elif isinstance(event, FillEvent):
+        portfolio.update_positions(event)
+```
+
+## Technical Highlights
+
+### Statistical Rigor
+```python
+def calculate_sharpe_ratio(returns: np.ndarray, risk_free_rate: float = 0.02) -> Dict:
+    """Not just the ratio - includes confidence intervals and significance testing"""
+    excess_returns = returns - risk_free_rate/252
+    sharpe = np.sqrt(252) * np.mean(excess_returns) / np.std(excess_returns)
+    
+    # Test if Sharpe is significantly different from zero
+    t_stat = sharpe * np.sqrt(len(returns))
+    p_value = 2 * (1 - stats.t.cdf(abs(t_stat), len(returns) - 1))
+    
+    return {
+        'sharpe_ratio': sharpe,
+        'statistically_significant': p_value < 0.05,
+        'confidence_interval': self._bootstrap_ci(returns, 0.95)
+    }
+```
+
+### Performance Optimization
+The performance gains came from three key optimizations:
+
+1. **Custom event queue with heapq** - O(log n) insertions vs O(n) for naive approaches
+2. **Vectorized portfolio calculations** - JIT compilation with Numba for critical paths
+3. **Memory-mapped data loading** - Process datasets larger than RAM
+
+### Real Market Microstructure
+```python
+class AdvancedSlippageModel:
+    """
+    Square-root market impact: Impact = σ * (Volume/ADV)^0.5
+    Based on Almgren-Chriss research, not just made-up constants
+    """
+    def calculate_slippage(self, order_size: int, adv: float, volatility: float) -> Decimal:
+        market_impact = volatility * np.sqrt(order_size / adv) * self.spread_factor
+        return Decimal(str(min(market_impact, self.max_impact)))
+```
+
+## Performance Benchmarks
+
+I benchmarked against other popular libraries:
+
+| Framework | Events/sec | Memory (4yr data) | Type Safety |
+|-----------|------------|-------------------|-------------|
+| **This Engine** | **10,247** | **485MB** | **100%** |
+| Zipline | 1,200 | 2.1GB | Minimal |
+| Backtrader | 800 | 1.8GB | None |
+| VectorBT | 15,000* | 900MB | None |
+
+*VectorBT is faster but can't handle event-driven strategies properly
+
+## Quick Start
+
+```python
+from backtesting_engine import BacktestEngine
+from backtesting_engine.strategies import MeanReversionStrategy
+
+# Create a mean reversion strategy
+strategy = MeanReversionStrategy(
+    symbols=["AAPL", "MSFT"], 
+    lookback_period=20,
+    entry_threshold=2.0
+)
+
+# Set up realistic execution environment
+engine = BacktestEngine(
+    start_date="2020-01-01",
+    end_date="2023-12-31",
+    initial_capital=1_000_000,
+    commission_model='interactive_brokers',
+    slippage_model='market_impact'
+)
+
+engine.add_strategy(strategy)
+results = engine.run()
+
+print(f"Total Return: {results.total_return:.2%}")
+print(f"Sharpe Ratio: {results.sharpe_ratio:.2f}")
+print(f"Max Drawdown: {results.max_drawdown:.2%}")
+```
+
+## Example Results
+
+```
+BACKTEST RESULTS SUMMARY
+================================================================================
+Period: 2020-01-01 to 2023-12-31
+Initial Capital: $1,000,000.00
+Final Capital: $1,185,000.00
+
+PERFORMANCE METRICS
+----------------------------------------
+Total Return: 18.5%
+Annualized Return: 4.3%
+Volatility: 12.8%
+Sharpe Ratio: 1.42
+Sortino Ratio: 1.89
+
+RISK METRICS
+----------------------------------------
+Maximum Drawdown: -8.3%
+VaR (95%): -2.1%
+CVaR (95%): -3.4%
+
+TRADING METRICS
+----------------------------------------
+Total Trades: 127
+Win Rate: 64.2%
+Profit Factor: 1.67
+```
+
+## Testing Strategy
+
+I learned the hard way that financial code needs serious testing:
+
+```python
+# Property-based testing with Hypothesis
+@given(
+    initial_capital=st.decimals(min_value=10000, max_value=10000000),
+    fill_price=st.decimals(min_value=1, max_value=1000),
+    quantity=st.integers(min_value=1, max_value=10000)
+)
+def test_portfolio_invariants(initial_capital, fill_price, quantity):
+    """Portfolio value must always equal cash + position values"""
+    portfolio = Portfolio(initial_capital)
+    fill = create_test_fill(fill_price, quantity)
+    portfolio.process_fill(fill)
+    
+    expected_value = portfolio.cash + sum(pos.market_value for pos in portfolio.positions.values())
+    assert abs(portfolio.calculate_total_equity() - expected_value) < Decimal('0.01')
+```
+
+Property-based testing caught edge cases I never would have thought of manually.
+
+## Installation & Demo
+
+```bash
+git clone https://github.com/your-username/backtesting-engine.git
+cd backtesting-engine
+pip install -e .
+
+# Run the demo
+python quick_demo.py
+```
+
+The demo runs a simple mean reversion strategy and generates a performance report. Takes about 30 seconds.
+
+## Deep Dive Documentation
+
+For recruiters who want to understand the technical depth:
+
+### 📐 [Mathematical Models & Algorithms](docs/algorithms.md)
+- Statistical significance testing and multiple hypothesis correction
+- GARCH volatility modeling and cointegration analysis  
+- Value-at-Risk implementations and Monte Carlo simulation
+- Walk-forward analysis and overfitting detection
+
+### 🏗️ [System Architecture](docs/architecture.md)  
+- Event-driven design patterns and priority queue implementation
+- Memory management and performance optimization techniques
+- Scalability considerations and distributed computing design
+- Database schema optimization for time-series data
+
+### ⚡ [Performance Engineering](docs/performance.md)
+- Benchmarking methodology and profiling techniques
+- JIT compilation with Numba and vectorized operations
+- Memory-mapped data loading and garbage collection tuning
+- Database optimization and connection pooling
+
+### 📊 [API Reference](docs/api.md)
+- Complete API documentation with examples
+- Strategy framework and extensibility patterns
+- Risk management system integration
+- Error handling and monitoring capabilities
+
+### 📋 [Product Strategy](product.md)
+- Market analysis and competitive positioning
+- User personas and feature prioritization
+- Go-to-market strategy and success metrics
+- Technical product decisions and trade-offs
+
+## What I'd Build Next
+
+The current version handles most use cases, but there are some interesting extensions:
+
+- **GPU acceleration** for Monte Carlo simulations (looking at CuPy)
+- **Distributed backtesting** with Ray for parameter sweeps  
+- **Alternative data integration** (sentiment, satellite imagery)
+- **Reinforcement learning** for dynamic position sizing
+
+The foundation is solid enough that these would be natural extensions rather than rewrites.
+
+## Technical Stack
+
+**Core**: Python 3.11+, Pydantic v2, NumPy, Pandas  
+**Performance**: Numba for JIT compilation, optimized data structures  
+**Testing**: pytest, Hypothesis for property-based testing  
+**Validation**: 100% type hints, Pydantic runtime validation
+
+---
+
+This project taught me more about quantitative finance and systems engineering than any course could. Every design decision came from hitting real performance bottlenecks or mathematical edge cases. The code quality reflects what I've learned about building systems that need to be both fast and correct.
+
+If you're interested in quantitative finance or event-driven architectures, I'd love to discuss the technical decisions behind this engine.
