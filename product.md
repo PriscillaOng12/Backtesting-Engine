@@ -1,8 +1,12 @@
 # Product Strategy & Market Analysis
 
+## Why I Wrote This
+
+I enjoy building technical projects, but I'm always curious whether what I build actually matters to people. After spending months optimizing this backtesting engine, I wanted to think seriously about who would use it and why. This document is my attempt to understand the business side of technology - something I'm still learning but find fascinating.
+
 ## Executive Summary
 
-This document outlines the product strategy, market opportunity, and commercial potential for our backtesting engine. While developed as a technical showcase, this analysis demonstrates product thinking capabilities essential for Product Manager roles at both quantitative trading firms and technology companies.
+This document outlines the product strategy, market opportunity, and commercial potential for the backtesting engine.
 
 ## Market Analysis
 
@@ -457,6 +461,3 @@ This backtesting engine represents a significant market opportunity at the inter
 3. **Scale**: Expand into adjacent markets with platform approach
 4. **Community**: Build ecosystem around open source and partnerships
 
-The combination of technical innovation, clear market need, and scalable business model positions this product for significant success in the rapidly growing quantitative finance technology market.
-
-This analysis demonstrates the product thinking and market understanding essential for senior Product Manager roles while showcasing the technical depth valued by quantitative trading firms.
