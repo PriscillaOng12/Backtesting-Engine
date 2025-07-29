@@ -1,0 +1,62 @@
+# Basic configuration for backtesting engine
+engine:
+  start_date: "2020-01-01"
+  end_date: "2023-12-31"
+  initial_capital: 1000000
+  commission: 0.001
+  margin_requirement: 0.5
+  max_leverage: 2.0
+
+data:
+  source: "csv"  # csv, database, api
+  path: "data/"
+  symbols:
+    - "AAPL"
+    - "MSFT"
+    - "GOOGL"
+  frequency: "daily"
+  validate_data: true
+  handle_missing: "forward_fill"
+
+strategy:
+  name: "MeanReversion"
+  parameters:
+    lookback_period: 20
+    std_dev_multiplier: 2.0
+    rsi_period: 14
+    rsi_oversold: 30.0
+    rsi_overbought: 70.0
+    position_size: 0.05
+    stop_loss: 0.05
+    take_profit: 0.10
+
+execution:
+  slippage:
+    model: "linear"
+    parameters:
+      base_rate: 0.001
+      size_impact: 0.01
+      volatility_impact: 0.005
+  
+  commission:
+    model: "percentage"
+    parameters:
+      commission_rate: 0.001
+      min_commission: 1.0
+  
+  partial_fill_probability: 0.1
+  min_partial_fill_ratio: 0.3
+  reject_probability: 0.001
+
+# Risk management settings
+risk:
+  max_position_size: 0.1
+  max_portfolio_leverage: 2.0
+  stop_loss_global: 0.02
+
+# Output settings
+output:
+  save_trades: true
+  save_snapshots: true
+  snapshot_frequency: "daily"
+  generate_plots: true
