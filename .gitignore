@@ -1,0 +1,62 @@
+# Add to .gitignore:
+
+# Development and testing artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.cache/
+
+# Environment and IDE
+.env
+.venv/
+venv/
+env/
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Data files (can be large)
+data/
+*.csv
+*.parquet
+*.h5
+*.hdf5
+
+# Results and outputs
+results/
+reports/
+*.html (unless documentation)
+*.png (unless documentation assets)
+*.jpg
+*.pdf
+
+# Logs
+*.log
+logs/
+
+# Personal/sensitive info
+config_local.py
+secrets.yaml
+.secrets/
+personal_strategies/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# MacOS
+.DS_Store
+
+# Windows
+Thumbs.db
