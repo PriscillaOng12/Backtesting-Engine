@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document details the mathematical rigor and algorithmic sophistication underlying the backtesting engine, demonstrating the quantitative depth expected by top-tier trading firms and the computational complexity understanding valued by tech companies.
+This document details the mathematical foundations and algorithms underlying this backtesting engine.
 
 ## Financial Mathematics Implementation
 
@@ -10,7 +10,7 @@ This document details the mathematical rigor and algorithmic sophistication unde
 
 #### Sharpe Ratio with Statistical Significance
 
-The traditional Sharpe ratio calculation often ignores statistical significance. Our implementation includes proper hypothesis testing:
+The traditional Sharpe ratio calculation often ignores statistical significance. This implementation includes proper hypothesis testing:
 
 ```python
 def calculate_sharpe_ratio_with_significance(
