@@ -2,13 +2,11 @@
 
 ## Overview
 
-This document details the performance optimization techniques, benchmarking methodologies, and scalability engineering that enables the backtesting engine to process institutional-scale workloads efficiently. The optimizations demonstrate both systems engineering expertise valued by big tech and the performance-critical mindset essential for quantitative trading.
+This document details the performance optimization techniques, benchmarking methodologies, and scalability engineering that enable the backtesting engine to process large workloads efficiently.
 
-## Performance Philosophy
+## Approach
 
-> **"Premature optimization is the root of all evil, but mature optimization is the root of all performance."**
-
-Our approach balances algorithmic efficiency with maintainable code, focusing on:
+The approach used in building this engine balances algorithmic efficiency with maintainable code, focusing on:
 1. **Measurement-Driven Optimization**: Profile first, optimize second
 2. **Asymptotic Complexity**: Choose algorithms that scale
 3. **Memory Locality**: Cache-friendly data access patterns
@@ -936,4 +934,3 @@ class ScalableDataAccess:
                     print(f"Failed to apply optimization: {e}")
 ```
 
-This performance engineering documentation demonstrates the kind of deep technical optimization work that impresses both quantitative trading firms (who need high-performance systems) and big tech companies (who value systems engineering expertise and scalability thinking).
