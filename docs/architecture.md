@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document provides a comprehensive technical deep-dive into the backtesting engine's architecture, designed for software engineers and system architects evaluating the technical sophistication and scalability of the system.
+This document explains the system architecture of this backtesting engine and assesses the scalability of the system.
 
 ## High-Level Architecture
 
@@ -91,9 +91,9 @@ class BacktestEngine:
 
 ### 2. Type Safety with Pydantic v2
 
-**Problem Solved**: Financial data processing is notorious for silent errors due to type mismatches, precision loss, and data corruption. Traditional Python's dynamic typing exacerbates these issues.
+**Challenge Faced**: Financial data processing is prone to silent errors due to type mismatches, precision loss, and data corruption; exacerbated by traditional Python's dynamic typing.
 
-**Solution**: Comprehensive Pydantic validation for all data structures:
+**Solution**: Pydantic validation for all data structures:
 
 ```python
 class MarketEvent(Event):
@@ -492,5 +492,3 @@ class DistributedBacktestEngine:
             
         return job_id
 ```
-
-This architecture demonstrates production-ready system design with careful consideration of performance, reliability, and maintainability - essential qualities for both quantitative trading systems and large-scale software engineering projects.
