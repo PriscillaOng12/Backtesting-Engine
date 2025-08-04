@@ -7,8 +7,7 @@
 
 ### Demo Sneak Peek
 
-
-https://github.com/user-attachments/assets/a3cbdf17-e864-47f0-b816-b6ba9706feeb
+https://github.com/user-attachments/assets/a7090cff-62d5-455b-b685-81fb769d6a26
 
 
 I built this backtesting engine to learn how quantitative trading strategies are tested through event-driven systems, financial mathematics, and performance optimization.
