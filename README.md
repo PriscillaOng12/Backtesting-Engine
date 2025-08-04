@@ -5,13 +5,11 @@
 [![Performance](https://img.shields.io/badge/performance-10k%20events/sec-brightgreen.svg)](#performance)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-### Understanding what makes a good backtesting engine
+### Demo Sneak Peek
 
-Quantitative trading requires backtesting engines that can:
-- **Process millions of events** without memory leaks or performance degradation
-- **Implement sophisticated risk models** with mathematical precision 
-- **Handle market microstructure** effects like slippage and partial fills
-- **Provide statistical significance testing** to avoid overfitting
+
+https://github.com/user-attachments/assets/a3cbdf17-e864-47f0-b816-b6ba9706feeb
+
 
 I built this backtesting engine to learn how quantitative trading strategies are tested through event-driven systems, financial mathematics, and performance optimization.
 
