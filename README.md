@@ -1,10 +1,38 @@
-# 🚀 Backtesting Engine
+# Backtesting Engine
 
-[![Python](https://img.shields.io/badge/python-v3.11+-blue.svg)](https://python.org)
-[![Tests](https://img.shields.io/badge/tests-23%20passed-brightgreen.svg)](#testing)
-[![Performance](https://img.shields.io/badge/performance-10k%20events/sec-brightgreen.svg)](#performance)
-[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+## Technical Stack
 
+#### Core Engine
+[![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python)](https://python.org/)
+[![Pydantic](https://img.shields.io/badge/Pydantic-v2-E92063?style=for-the-badge&logo=pydantic)](https://pydantic.dev/)
+[![NumPy](https://img.shields.io/badge/NumPy-1.24-013243?style=for-the-badge&logo=numpy)](https://numpy.org/)
+[![Pandas](https://img.shields.io/badge/Pandas-2.0-150458?style=for-the-badge&logo=pandas)](https://pandas.pydata.org/)
+
+#### Performance & Optimization
+[![Numba](https://img.shields.io/badge/Numba-JIT-00A3E0?style=for-the-badge&logo=numba)](https://numba.pydata.org/)
+[![Polars](https://img.shields.io/badge/Polars-Fast_CSV-CD792C?style=for-the-badge&logo=polars)](https://pola.rs/)
+[![Memory_Mapping](https://img.shields.io/badge/Memory_Mapping-I/O-FF6B6B?style=for-the-badge)]()
+[![Decimal](https://img.shields.io/badge/Decimal-Precision-4CAF50?style=for-the-badge)]()
+
+#### Data & Storage
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-336791?style=for-the-badge&logo=postgresql)](https://postgresql.org/)
+[![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-2.0-D71F00?style=for-the-badge&logo=sqlalchemy)](https://sqlalchemy.org/)
+[![Redis](https://img.shields.io/badge/Redis-Cache-DC382D?style=for-the-badge&logo=redis)](https://redis.io/)
+
+#### Financial Mathematics
+[![SciPy](https://img.shields.io/badge/SciPy-Stats-8CAAE6?style=for-the-badge&logo=scipy)](https://scipy.org/)
+[![GARCH](https://img.shields.io/badge/GARCH-Volatility-FF9500?style=for-the-badge)]()
+[![Monte_Carlo](https://img.shields.io/badge/Monte_Carlo-Simulation-9C27B0?style=for-the-badge)]()
+
+#### Testing & Quality
+[![Pytest](https://img.shields.io/badge/Pytest-7.4-0A9EDC?style=for-the-badge&logo=pytest)](https://pytest.org/)
+[![Hypothesis](https://img.shields.io/badge/Hypothesis-Property_Testing-2E8B57?style=for-the-badge)](https://hypothesis.readthedocs.io/)
+[![MyPy](https://img.shields.io/badge/MyPy-Type_Safety-2E8B57?style=for-the-badge&logo=python)](https://mypy-lang.org/)
+
+#### Development & Profiling
+[![Git](https://img.shields.io/badge/Git-Version_Control-F05032?style=for-the-badge&logo=git)](https://git-scm.com/)
+[![cProfile](https://img.shields.io/badge/cProfile-Performance-FF6B35?style=for-the-badge)]()
+[![psutil](https://img.shields.io/badge/psutil-Monitoring-1E88E5?style=for-the-badge)]()
 ### Demo Sneak Peek
 
 https://github.com/user-attachments/assets/a7090cff-62d5-455b-b685-81fb769d6a26
